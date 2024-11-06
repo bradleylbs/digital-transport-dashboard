@@ -1,11 +1,7 @@
-const nextConfig = {
-  output: 'export',
-  images: {
-    unoptimized: true
-  },
-  trailingSlash: true,
-  basePath: '/digital-transport-dashboard',
-  assetPrefix: '/digital-transport-dashboard'
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
 };
 
 export default nextConfig;
