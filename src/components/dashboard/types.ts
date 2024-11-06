@@ -1,4 +1,3 @@
-import { type ReactElement } from 'react';
 
 export interface Project {
   name: string;

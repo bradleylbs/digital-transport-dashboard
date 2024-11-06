@@ -2,11 +2,14 @@
   "name": "digital-transport-dashboard",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://bradleylbs.github.io/digital-transport-dashboard",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "export": "next export",
+    "predeploy": "npm run build && npm run export",
+    "deploy": "gh-pages -d out"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
@@ -25,6 +28,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "15.0.2",
+    "gh-pages": "^6.2.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.14",
     "typescript": "^5"

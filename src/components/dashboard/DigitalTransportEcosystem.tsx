@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { PillarSection } from './PillarSection';
@@ -16,27 +16,27 @@ import {
   HardHat as Construction,
   Cloud,
   Smartphone, 
-  CreditCard, 
   FileText,
   AlertTriangle, 
   Navigation,
   Ticket as TicketIcon,
-  Route,
   Activity, 
   Map, 
   Wrench as Tool,
   ClipboardCheck, 
   UserCog,
-  ChevronDown
 } from 'lucide-react';
-
-// ... your ecosystem data remains the same ...
 
 export function DigitalTransportEcosystem() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPhase, setSelectedPhase] = useState<string>('');
   const [showStats, setShowStats] = useState(false);
   const [selectedPillar, setSelectedPillar] = useState<string | null>(null);
+
+  // Function to handle pillar selection
+  const handlePillarSelect = (pillarTitle: string) => {
+    setSelectedPillar(selectedPillar === pillarTitle ? null : pillarTitle);
+  };
 
   // Filter function
   const filteredEcosystem = ecosystem.map(section => ({
@@ -200,7 +200,16 @@ export function DigitalTransportEcosystem() {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ delay: idx * 0.1 }}
               >
-                <PillarSection section={section} />
+                <div
+                  className={`cursor-pointer p-4 rounded-lg ${
+                    selectedPillar === section.pillar.title
+                      ? 'bg-blue-800'
+                      : 'bg-gray-700'
+                  }`}
+                  onClick={() => handlePillarSelect(section.pillar.title)}
+                >
+                  <PillarSection section={section} />
+                </div>
               </motion.div>
             ))}
             {filteredEcosystem.length === 0 && (
