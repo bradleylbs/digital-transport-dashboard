@@ -1,26 +1,26 @@
 "use client";
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { PillarSection } from './PillarSection';
-import type { EcosystemSection } from './types';
-import { 
-  Search, 
-  Filter, 
-  BarChart2, 
-  Users, 
-  Workflow, 
-  Bus, 
+
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Search,
+  Filter,
+  BarChart2,
+  Users,
+  Workflow,
+  Bus,
   TrafficCone,
   Cloud,
-  Smartphone, 
+  Smartphone,
   Globe,
-  Map, 
-  ScanLine, 
-  Glasses, 
-  LineChart, 
+  Map,
+  ScanLine,
+  Glasses,
+  LineChart,
   UserCog,
-  Bell,Eye, Cpu,
+  Bell,
+  Eye,
+  Cpu,
   Link2,
   HeadphonesIcon,
   ShieldAlert,
@@ -36,207 +36,202 @@ import {
   Settings2,
   ScanSearch,
   FileStack,
-  Wallet
-} from 'lucide-react';
-
+  Wallet,
+} from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { PillarSection } from "./PillarSection";
+import type { EcosystemSection } from "./types";
 export function DigitalTransportEcosystem() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPhase, setSelectedPhase] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedPhase, setSelectedPhase] = useState<string>("");
   const [showStats, setShowStats] = useState(false);
   const [selectedPillar, setSelectedPillar] = useState<string | null>(null);
 
-  // Function to handle pillar selection
   const handlePillarSelect = (pillarTitle: string) => {
     setSelectedPillar(selectedPillar === pillarTitle ? null : pillarTitle);
   };
 
-  // Filter function
-  const filteredEcosystem = ecosystem.map(section => ({
-    ...section,
-    initiatives: section.initiatives.map(initiative => ({
-      ...initiative,
-      projects: initiative.projects.filter(project => 
-        project.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (!selectedPhase || project.phase === selectedPhase)
-      )
-    })).filter(initiative => initiative.projects.length > 0)
-  })).filter(section => section.initiatives.length > 0);
+  // Filtered ecosystem based on search term and selected phase
+  const filteredEcosystem = ecosystem
+    .map((section) => ({
+      ...section,
+      initiatives: section.initiatives
+        .map((initiative) => ({
+          ...initiative,
+          projects: initiative.projects.filter((project) => {
+            const matchesSearch = project.name
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase());
+            const matchesPhase = !selectedPhase || project.phase === selectedPhase;
+            return matchesSearch && matchesPhase;
+          }),
+        }))
+        .filter((initiative) => initiative.projects.length > 0),
+    }))
+    .filter((section) => section.initiatives.length > 0);
 
   // Calculate statistics
   const stats = {
-    total: ecosystem.reduce((acc, section) => 
-      acc + section.initiatives.reduce((acc2, init) => 
-        acc2 + init.projects.length, 0), 0),
+    total: ecosystem.reduce(
+      (acc, section) =>
+        acc +
+        section.initiatives.reduce((acc2, init) => acc2 + init.projects.length, 0),
+      0
+    ),
     byPhase: ecosystem.reduce((acc, section) => {
-      section.initiatives.forEach(init => 
-        init.projects.forEach(proj => {
+      section.initiatives.forEach((init) =>
+        init.projects.forEach((proj) => {
           acc[proj.phase] = (acc[proj.phase] || 0) + 1;
-        }));
-      return acc;
-    }, {} as Record<string, number>),
-    byPillar: ecosystem.reduce((acc, section) => {
-      acc[section.pillar.title] = section.initiatives.reduce(
-        (acc2, init) => acc2 + init.projects.length, 0
+        })
       );
       return acc;
-    }, {} as Record<string, number>)
+    }, {} as Record<string, number>),
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen"
-    >
-      <Card className="w-full max-w-5xl bg-gray-900 shadow-xl">
-        <CardHeader className="border-b border-gray-800">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <CardTitle className="text-3xl text-center text-white">
-            6 PILLARS TO PROVIDE AN INTEGRATED DIGITISED MOBILITY ECOSYSTEM
-            </CardTitle>
-            <p className="text-center text-gray-400 mt-2">
-            Kwazulu-Natal Department of Transport
-            </p>
-          </motion.div>
+    <div className="min-h-screen bg-gray-950">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="container mx-auto px-4 py-6 sm:py-8 md:py-12"
+      >
+        <Card className="w-full max-w-[95vw] md:max-w-5xl mx-auto bg-gray-900 shadow-xl">
+          <CardHeader className="border-b border-gray-800 p-4 sm:p-6 md:p-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="space-y-4"
+            >
+              <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center text-white font-bold tracking-tight">
+                6 PILLARS TO PROVIDE AN INTEGRATED DIGITISED MOBILITY ECOSYSTEM
+              </CardTitle>
+              <p className="text-sm sm:text-base text-gray-400 text-center">
+                Kwazulu-Natal Department of Transport
+              </p>
+            </motion.div>
 
-          {/* Search and Filter Bar */}
-          <motion.div 
-            className="mt-6 space-y-4"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <div className="flex gap-4 flex-wrap">
-              {/* Search Input */}
-              <div className="relative flex-1 min-w-[200px]">
-                <input
-                  type="text"
-                  placeholder="Search projects..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-                <Search className="absolute left-3 top-2.5 text-gray-400 h-5 w-5" />
+            {/* Search and Filter Section */}
+            <motion.div 
+              className="mt-6 space-y-4"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    placeholder="Search projects..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm sm:text-base"
+                  />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 sm:h-5 sm:w-5" />
+                </div>
+
+                {/* Phase Filter */}
+                <div className="relative">
+                  <select
+                    value={selectedPhase}
+                    onChange={(e) => setSelectedPhase(e.target.value)}
+                    className="w-full sm:w-48 bg-gray-800 text-white rounded-lg px-4 py-2 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm sm:text-base"
+                  >
+                    <option value="">All Phases</option>
+                    <option value="Initiation Phase">Initiation</option>
+                    <option value="Planning Phase">Planning</option>
+                    <option value="Execution Phase">Execution</option>
+                    <option value="Monitoring and Controlling">Monitoring</option>
+                  </select>
+                  <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 sm:h-5 sm:w-5 pointer-events-none" />
+                </div>
               </div>
-
-              {/* Phase Filter */}
-              <motion.div 
-                className="relative min-w-[200px]"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <select
-                  value={selectedPhase}
-                  onChange={(e) => setSelectedPhase(e.target.value)}
-                  className="w-full bg-gray-800 text-white rounded-lg px-4 py-2 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all cursor-pointer"
-                >
-                  <option value="">All Phases</option>
-                  <option value="Initiation Phase">Initiation</option>
-                  <option value="Planning Phase">Planning</option>
-                  <option value="Execution Phase">Execution</option>
-                  <option value="Monitoring and Controlling">Monitoring</option>
-                </select>
-                <Filter className="absolute right-3 top-2.5 text-gray-400 h-5 w-5 pointer-events-none" />
-              </motion.div>
 
               {/* Stats Toggle */}
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setShowStats(!showStats)}
-                className="bg-gray-800 text-white rounded-lg px-4 py-2 flex items-center gap-2 hover:bg-gray-700 transition-all"
+                className="w-full sm:w-auto bg-gray-800 text-white rounded-lg px-4 py-2 flex items-center justify-center gap-2 hover:bg-gray-700 transition-all text-sm sm:text-base"
               >
-                <BarChart2 className="h-5 w-5" />
-                Statistics
+                <BarChart2 className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span>Statistics</span>
               </motion.button>
-            </div>
 
-            {/* Statistics Panel */}
-            <AnimatePresence>
-              {showStats && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-gray-800 rounded-lg p-4 overflow-hidden"
-                >
-                  <motion.div 
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
+              {/* Statistics Panel */}
+              <AnimatePresence>
+                {showStats && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-gray-800 rounded-lg p-4 overflow-hidden"
                   >
-                    <div className="text-center p-4 bg-gray-700/50 rounded-lg">
-                      <motion.div 
-                        className="text-3xl font-bold text-blue-400"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", stiffness: 100 }}
-                      >
-                        {stats.total}
-                      </motion.div>
-                      <div className="text-gray-400">Total Projects</div>
-                    </div>
-                    {Object.entries(stats.byPhase).map(([phase, count], idx) => (
-                      <motion.div 
-                        key={phase}
-                        className="text-center p-4 bg-gray-700/50 rounded-lg"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                      >
-                        <div className="text-2xl font-bold text-blue-400">{count}</div>
-                        <div className="text-gray-400">{phase.replace(' Phase', '')}</div>
-                      </motion.div>
-                    ))}
+                    <motion.div 
+                      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <div className="text-center p-4 bg-gray-700/50 rounded-lg">
+                        <div className="text-3xl font-bold text-blue-400">{stats.total}</div>
+                        <div className="text-gray-400">Total Projects</div>
+                      </div>
+                      {Object.entries(stats.byPhase).map(([phase, count]) => (
+                        <div
+                          key={phase}
+                          className="text-center p-4 bg-gray-700/50 rounded-lg"
+                        >
+                          <div className="text-2xl font-bold text-blue-400">{count}</div>
+                          <div className="text-gray-400">{phase}</div>
+                        </div>
+                      ))}
+                    </motion.div>
                   </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </CardHeader>
+
+          {/* Main Content */}
+          <CardContent className="p-4 sm:p-6 md:p-8 space-y-4">
+            <AnimatePresence>
+              {filteredEcosystem.map((section) => (
+                <motion.div
+                  key={section.pillar.title}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <div
+                    className={`cursor-pointer p-4 rounded-lg transition-all ${
+                      selectedPillar === section.pillar.title
+                        ? "bg-blue-800"
+                        : "bg-gray-700 hover:bg-gray-600"
+                    }`}
+                    onClick={() => handlePillarSelect(section.pillar.title)}
+                  >
+                    <PillarSection section={section} />
+                  </div>
+                </motion.div>
+              ))}
+              {filteredEcosystem.length === 0 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center text-gray-400 py-8"
+                >
+                  No projects found matching your criteria
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
-        </CardHeader>
-
-        <CardContent className="p-6 space-y-4">
-          <AnimatePresence>
-            {filteredEcosystem.map((section, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ delay: idx * 0.1 }}
-              >
-                <div
-                  className={`cursor-pointer p-4 rounded-lg ${
-                    selectedPillar === section.pillar.title
-                      ? 'bg-blue-800'
-                      : 'bg-gray-700'
-                  }`}
-                  onClick={() => handlePillarSelect(section.pillar.title)}
-                >
-                  <PillarSection section={section} />
-                </div>
-              </motion.div>
-            ))}
-            {filteredEcosystem.length === 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center text-gray-400 py-8"
-              >
-                No projects found matching your criteria
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </CardContent>
-      </Card>
-    </motion.div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
   );
 }
 
@@ -439,7 +434,7 @@ const ecosystem: EcosystemSection[] = [
         ]
       },
       {
-        name: "Operating Licences",
+        name: "Digital Operating Licences",
         icon: BadgeCheck,
         projects: [
           {
@@ -700,4 +695,3 @@ const ecosystem: EcosystemSection[] = [
   }
 
 ];
-

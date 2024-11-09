@@ -15,7 +15,7 @@ export const PillarSection: React.FC<PillarSectionProps> = ({ section }) => {
   const Icon = section.pillar.icon;
 
   useEffect(() => {
-    setIsClient(true); // Sets true only after component mounts on the client
+    setIsClient(true);
   }, []);
 
   const totalProjects = section.initiatives.reduce(
@@ -30,37 +30,47 @@ export const PillarSection: React.FC<PillarSectionProps> = ({ section }) => {
       } ${section.pillar.gradient}`}
     >
       <div
-        className="p-4 cursor-pointer flex items-center group"
+        className="p-3 sm:p-4 cursor-pointer flex flex-col sm:flex-row items-start sm:items-center group space-y-2 sm:space-y-0"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <div className="bg-white/10 p-2 rounded-lg mr-3">
-          <Icon className="h-6 w-6 text-white" />
+        <div className="flex items-center gap-3 flex-grow">
+          <div className="bg-white/10 p-2 rounded-lg">
+            <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+          </div>
+          <div className="flex-grow min-w-0">
+            <h3 className="text-lg sm:text-xl font-semibold text-white truncate">
+              {section.pillar.title}
+            </h3>
+            <p className="text-white/80 text-xs sm:text-sm line-clamp-2 sm:line-clamp-none">
+              {section.pillar.description}
+            </p>
+          </div>
         </div>
-        <div className="flex-grow">
-          <h3 className="text-xl font-semibold text-white">
-            {section.pillar.title}
-          </h3>
-          <p className="text-white/80 text-sm">
-            {section.pillar.description}
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="text-white/80 text-sm">
+        
+        <div className="flex items-center gap-2 sm:gap-4 ml-11 sm:ml-4 text-white/80">
+          <div className="text-xs sm:text-sm whitespace-nowrap">
             {section.initiatives.length} Initiatives • {totalProjects} Projects
           </div>
-          {isExpanded ? (
-            <ChevronDown className="text-white h-6 w-6" />
-          ) : (
-            <ChevronRight className="text-white h-6 w-6" />
-          )}
+          <div className="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8">
+            {isExpanded ? (
+              <ChevronDown className="text-white h-5 w-5 sm:h-6 sm:w-6" />
+            ) : (
+              <ChevronRight className="text-white h-5 w-5 sm:h-6 sm:w-6" />
+            )}
+          </div>
         </div>
       </div>
-      {/* Conditional rendering for expandable content */}
+
       {isClient && isExpanded && (
-        <div className="pb-4">
-          {section.initiatives.map((initiative, idx) => (
-            <InitiativeCard key={idx} initiative={initiative} />
-          ))}
+        <div className="pb-3 sm:pb-4 transition-all duration-300 ease-in-out">
+          <div className="space-y-2 sm:space-y-3">
+            {section.initiatives.map((initiative, idx) => (
+              <InitiativeCard 
+                key={idx} 
+                initiative={initiative}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
